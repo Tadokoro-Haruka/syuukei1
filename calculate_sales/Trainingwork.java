@@ -49,7 +49,7 @@ public class Trainingwork {
 						if(br != null);
 						br.close();
 					}catch(Exception e){
-						System.out.println("支店定義ファイルのフォーマットが不正です");
+						System.out.println("予期せぬエラーが発生しました");
 						return;
 					}
 				}
@@ -81,7 +81,7 @@ public class Trainingwork {
 						if(br != null);
 						br.close();
 					}catch(Exception e){
-						System.out.println("商品定義ファイルのフォーマットが不正です");
+						System.out.println("予期せぬエラーが発生しました");
 						return;
 					}
 				}
@@ -109,7 +109,7 @@ public class Trainingwork {
 				int k = Integer.parseInt(ss1);
 
 				if ( k - j != 1){
-					System.out.println("売り上げファイル名が連番になっていません");
+					System.out.println("売上ファイル名が連番になっていません");
 					return;
 				}
 			}
@@ -156,13 +156,14 @@ public class Trainingwork {
 					commoditySalemap.put(commodityCode,tesst);
 
 				}catch(FileNotFoundException e){
-						System.out.println("商品定義ファイルが存在しません");
 				}catch(IOException e){
 				}finally{
-					try {
+					try{
+						if(bffr != null);
 						bffr.close();
-					}catch (IOException e) {
+					}catch(Exception e){
 						System.out.println("予期せぬエラーが発生しました");
+						return;
 					}
 				}
 			}
@@ -188,10 +189,12 @@ public class Trainingwork {
 				}
 			}catch(IOException e){
 			}finally{
-				try {
+				try{
+					if(bw != null);
 					bw.close();
-				}catch (IOException e) {
+				}catch(Exception e){
 					System.out.println("予期せぬエラーが発生しました");
+					return;
 				}
 			}
 
@@ -216,9 +219,14 @@ public class Trainingwork {
 					bw.newLine();
 				}
 			}catch(IOException e){
-				System.out.println("予期せぬエラーが発生しました");
 			}finally{
-				bw.close();
+				try{
+					if(bw != null);
+					bw.close();
+				}catch(Exception e){
+					System.out.println("予期せぬエラーが発生しました");
+					return;
+				}
 			}
 
 	}
