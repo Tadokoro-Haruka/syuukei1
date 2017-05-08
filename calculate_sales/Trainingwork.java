@@ -18,8 +18,10 @@ import java.util.Map.Entry;
 public class Trainingwork {
 	public static void main(String[] args) throws IOException{
 
-		if (args.length != 1)
+		if (args.length != 1){
 			System.out.println("予期せぬエラーが発生しました");
+			return;
+		}
 
 			HashMap<String, String> branchNamemap = new HashMap<String,String>();
 			HashMap<String, Long> branchSalemap = new HashMap<String,Long>();
@@ -89,7 +91,7 @@ public class Trainingwork {
 					}
 
 					if(!commoditySalemap.containsKey(commodityCode)){
-						System.out.println(list.get(i).getName() +"の商品コードが不正です");
+						System.out.println(list.get(i).getName() + "の商品コードが不正です");
 						return;
 					}
 
@@ -97,6 +99,7 @@ public class Trainingwork {
 					Long test = branchSalemap.get(branchCode) + g;
 					if(test > 1000000000){
 						System.out.println("合計金額が10桁を超えました");
+						return;
 					}
 					branchSalemap.put(branchCode,test);
 
@@ -115,6 +118,7 @@ public class Trainingwork {
 						return;
 					}
 				}
+
 			}
 
 
@@ -125,9 +129,8 @@ public class Trainingwork {
 			if(!fileout(args[0],"commodity.out",commodityNamemap,commoditySalemap)){
 				return;
 			}
-
-
 	}
+
 
 		public static boolean fileRead(String dirPath,String fileName,HashMap<String, String> names,
 				HashMap<String, Long> sales,String code,String message){
@@ -148,6 +151,7 @@ public class Trainingwork {
 						String i = arrey[0];
 						if(!i.matches(code) || (arrey.length !=2)){
 							System.out.println(message + "定義ファイルのフォーマットが不正です");
+							return false;
 						}
 						names.put(arrey[0],arrey[1]);
 						sales.put(arrey[0],0L);
