@@ -32,7 +32,7 @@ public class Trainingwork {
 		if(!fileRead(args[0],"branch.lst",branchNamemap,branchSalemap,"[0-9]{3}","支店")){
 			return;
 		}
-		if(!fileRead(args[0],"commodity.lst",commodityNamemap,commoditySalemap,"[A-Z0-9]{8}","商品")){
+		if(!fileRead(args[0],"commodity.lst",commodityNamemap,commoditySalemap,"[a-zA-Z0-9]{8}","商品")){
 			return;
 		}
 
@@ -48,12 +48,12 @@ public class Trainingwork {
 		}
 
 		for (int i = 0; i<list.size() - 1 ; i++){
-			String s =  files[i].getName();
+			String s =  list.get(i).getName();
 			String ss = s.substring(0,8);
 
 			int j = Integer.parseInt(ss);
 
-			String s1 =  files[i+1].getName();
+			String s1 =  list.get(i + 1).getName();
 			String ss1 = s1.substring(0,8);
 
 			int k = Integer.parseInt(ss1);
@@ -81,6 +81,11 @@ public class Trainingwork {
 					return;
 				}
 
+				if(!rcdRead.get(2).matches("[0-9]+$")){
+					System.out.println("予期せぬエラーが発生しました");
+					return;
+				}
+
 				String branchCode = rcdRead.get(0);
 
 				String commodityCode = rcdRead.get(1);
@@ -97,6 +102,7 @@ public class Trainingwork {
 
 				long g = Long.parseLong(rcdRead.get(2));
 				Long test = branchSalemap.get(branchCode) + g;
+
 				if(test > 1000000000){
 					System.out.println("合計金額が10桁を超えました");
 					return;
@@ -112,8 +118,9 @@ public class Trainingwork {
 			}catch(IOException e){
 			}finally{
 				try{
-					if(bffr != null);
+					if(bffr != null){
 					bffr.close();
+					}
 				}catch(Exception e){
 					System.out.println("予期せぬエラーが発生しました");
 					return;
@@ -156,6 +163,7 @@ public class Trainingwork {
 				sales.put(arrey[0],0L);
 			}
 		}catch(Exception e){
+			System.out.println("予期せぬエラーが発生しました");
 			return false;
 		}finally{
 			try{
@@ -193,6 +201,7 @@ public class Trainingwork {
 				bw.newLine();
 			}
 		}catch(IOException e){
+			System.out.println("予期せぬエラーが発生しました");
 			return false;
 		}finally{
 			try{
