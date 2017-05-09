@@ -167,8 +167,9 @@ public class Trainingwork {
 			return false;
 		}finally{
 			try{
-				if(br != null);
+				if(br != null){
 				br.close();
+				}
 			}catch(Exception e){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
