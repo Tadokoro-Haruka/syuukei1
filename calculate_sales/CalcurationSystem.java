@@ -201,8 +201,8 @@ public class CalcurationSystem {
 					}
 			});
 
-			for (Entry<String,Long> entryy : commodityEntry){
-				bw.write(entryy.getKey() + "," +  names.get(entryy.getKey()) + "," + entryy.getValue());
+			for (Entry<String,Long> entry : commodityEntry){
+				bw.write(entry.getKey() + "," +  names.get(entry.getKey()) + "," + entry.getValue());
 				bw.newLine();
 			}
 		}catch(IOException e){
