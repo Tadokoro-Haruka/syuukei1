@@ -23,16 +23,16 @@ public class Trainingwork {
 			return;
 		}
 
-		HashMap<String, String> branchNamemap = new HashMap<String,String>();
-		HashMap<String, Long> branchSalemap = new HashMap<String,Long>();
+		HashMap<String, String> branchNamemap = new HashMap<>();
+		HashMap<String, Long> branchSalemap = new HashMap<>();
 
-		HashMap<String, String>commodityNamemap = new HashMap<String,String>();
-		HashMap<String, Long>commoditySalemap = new HashMap<String,Long>();
+		HashMap<String, String>commodityNamemap = new HashMap<>();
+		HashMap<String, Long>commoditySalemap = new HashMap<>();
 
-		if(!fileRead(args[0],"branch.lst",branchNamemap,branchSalemap,"[0-9]{3}","支店")){
+		if(!fileRead(args[0], "branch.lst", branchNamemap, branchSalemap, "[0-9]{3}", "支店")){
 			return;
 		}
-		if(!fileRead(args[0],"commodity.lst",commodityNamemap,commoditySalemap,"[a-zA-Z0-9]{8}","商品")){
+		if(!fileRead(args[0], "commodity.lst", commodityNamemap, commoditySalemap, "[a-zA-Z0-9]{8}", "商品")){
 			return;
 		}
 
@@ -47,24 +47,18 @@ public class Trainingwork {
 			}
 		}
 
-		for (int i = 0; i<list.size() - 1 ; i++){
-			String s =  list.get(i).getName();
-			String ss = s.substring(0,8);
+		for (int i = 0; i < list.size() - 1 ; i++){
 
-			int j = Integer.parseInt(ss);
+			int number = Integer.parseInt(list.get(i).getName().substring(0,8));
+			int nextnumber = Integer.parseInt(list.get(i + 1).getName().substring(0,8));
 
-			String s1 =  list.get(i + 1).getName();
-			String ss1 = s1.substring(0,8);
-
-			int k = Integer.parseInt(ss1);
-
-			if ( k - j != 1){
+			if ( number - nextnumber != 1){
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
 		}
 
-		for (int i = 0; i< list.size(); i++){
+		for (int i = 0; i < list.size(); i++){
 			BufferedReader bffr = null;
 			try{
 				ArrayList<String> rcdRead = new ArrayList<String>();
@@ -72,7 +66,7 @@ public class Trainingwork {
 				bffr = new BufferedReader(fr);
 
 				String s;
-				while((s = bffr.readLine())!= null){
+				while((s = bffr.readLine()) != null){
 					rcdRead.add(s);
 				}
 
@@ -81,7 +75,7 @@ public class Trainingwork {
 					return;
 				}
 
-				if(!rcdRead.get(2).matches("[0-9]+$")){
+				if(!rcdRead.get(2).matches("[0-9] + $")){
 					System.out.println("予期せぬエラーが発生しました");
 					return;
 				}
@@ -100,8 +94,8 @@ public class Trainingwork {
 					return;
 				}
 
-				long g = Long.parseLong(rcdRead.get(2));
-				Long test = branchSalemap.get(branchCode) + g;
+				long branchsales = Long.parseLong(rcdRead.get(2));
+				Long test = branchSalemap.get(branchCode) + branchsales;
 
 				if(test > 1000000000){
 					System.out.println("合計金額が10桁を超えました");
@@ -110,12 +104,22 @@ public class Trainingwork {
 
 				branchSalemap.put(branchCode,test);
 
-				long n = Long.parseLong(rcdRead.get(2));
-				Long tesst = commoditySalemap.get(commodityCode) + n;
-				commoditySalemap.put(commodityCode,tesst);
+				long commoditysales = Long.parseLong(rcdRead.get(2));
+				Long tesst = commoditySalemap.get(commodityCode) + commoditysales;
+
+				if(tesst > 1000000000){
+					System.out.println("合計金額が10桁を超えました");
+					return;
+				}
+
+				commoditySalemap.put(commodityCode, tesst);
 
 			}catch(FileNotFoundException e){
+				System.out.println("予期せぬエラーが発生しました");
+				return;
 			}catch(IOException e){
+				System.out.println("予期せぬエラーが発生しました");
+				return;
 			}finally{
 				try{
 					if(bffr != null){
@@ -128,22 +132,22 @@ public class Trainingwork {
 			}
 		}
 
-		if(!fileout(args[0],"branch.out",branchNamemap,branchSalemap)){
+		if(!fileOut(args[0], "branch.out", branchNamemap, branchSalemap)){
 			return;
 		}
 
-		if(!fileout(args[0],"commodity.out",commodityNamemap,commoditySalemap)){
+		if(!fileOut(args[0], "commodity.out", commodityNamemap, commoditySalemap)){
 			return;
 		}
 	}
 
 
-	public static boolean fileRead(String dirPath,String fileName,HashMap<String, String> names,
-		HashMap<String, Long> sales,String code,String message){
+	public static boolean fileRead(String dirPath, String fileName, HashMap<String, String> names,
+		HashMap<String, Long> sales, String code, String message){
 		BufferedReader br = null;
 
 		try{
-			File file = new File(dirPath,fileName);
+			File file = new File(dirPath, fileName);
 			if(!file.exists()){
 				System.out.println(message + "定義ファイルが存在しません");
 				return false;
@@ -152,15 +156,15 @@ public class Trainingwork {
 			FileReader fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			String s;
-			while((s = br.readLine())!= null){
+			while((s = br.readLine()) != null){
 				String[] arrey = s.split(",");
-				String i = arrey[0];
-				if(!i.matches(code) || (arrey.length !=2)){
+				String splitlist = arrey[0];
+				if((arrey.length != 2) || !splitlist.matches(code)){
 					System.out.println(message + "定義ファイルのフォーマットが不正です");
 					return false;
 				}
-				names.put(arrey[0],arrey[1]);
-				sales.put(arrey[0],0L);
+				names.put(arrey[0], arrey[1]);
+				sales.put(arrey[0], 0L);
 			}
 		}catch(Exception e){
 			System.out.println("予期せぬエラーが発生しました");
@@ -180,9 +184,10 @@ public class Trainingwork {
 
 
 
-	public static boolean fileout(String dirPath,String fileName,HashMap<String,String> names,HashMap<String,Long> sales){
+	public static boolean fileOut(String dirPath, String fileName, HashMap<String, String> names,
+			HashMap<String, Long> sales){
 
-		File filey = new File(dirPath,fileName);
+		File filey = new File(dirPath, fileName);
 		BufferedWriter bw = null;
 
 		try{
@@ -198,7 +203,7 @@ public class Trainingwork {
 			});
 
 			for (Entry<String,Long> entryy : commodityentries){
-				bw.write(entryy.getKey()+","+ names.get(entryy.getKey())+","+entryy.getValue());
+				bw.write(entryy.getKey() + "," +  names.get(entryy.getKey()) + "," + entryy.getValue());
 				bw.newLine();
 			}
 		}catch(IOException e){
