@@ -52,7 +52,7 @@ public class Trainingwork {
 			int number = Integer.parseInt(list.get(i).getName().substring(0,8));
 			int nextNumber = Integer.parseInt(list.get(i + 1).getName().substring(0,8));
 
-			if (number - nextNumber != 1){
+			if (nextNumber - number != 1){
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
