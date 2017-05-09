@@ -23,16 +23,16 @@ public class Trainingwork {
 			return;
 		}
 
-		HashMap<String, String> branchNamemap = new HashMap<>();
-		HashMap<String, Long> branchSalemap = new HashMap<>();
+		HashMap<String, String> branchNameMap = new HashMap<>();
+		HashMap<String, Long> branchSaleMap = new HashMap<>();
 
-		HashMap<String, String>commodityNamemap = new HashMap<>();
-		HashMap<String, Long>commoditySalemap = new HashMap<>();
+		HashMap<String, String>commodityNameMap = new HashMap<>();
+		HashMap<String, Long>commoditySaleMap = new HashMap<>();
 
-		if(!fileRead(args[0], "branch.lst", branchNamemap, branchSalemap, "[0-9]{3}", "支店")){
+		if(!fileRead(args[0], "branch.lst", branchNameMap, branchSaleMap, "[0-9]{3}", "支店")){
 			return;
 		}
-		if(!fileRead(args[0], "commodity.lst", commodityNamemap, commoditySalemap, "[a-zA-Z0-9]{8}", "商品")){
+		if(!fileRead(args[0], "commodity.lst", commodityNameMap, commoditySaleMap, "[a-zA-Z0-9]{8}", "商品")){
 			return;
 		}
 
@@ -50,9 +50,9 @@ public class Trainingwork {
 		for (int i = 0; i < list.size() - 1 ; i++){
 
 			int number = Integer.parseInt(list.get(i).getName().substring(0,8));
-			int nextnumber = Integer.parseInt(list.get(i + 1).getName().substring(0,8));
+			int nextNumber = Integer.parseInt(list.get(i + 1).getName().substring(0,8));
 
-			if ( number - nextnumber != 1){
+			if (number - nextNumber != 1){
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
@@ -75,7 +75,7 @@ public class Trainingwork {
 					return;
 				}
 
-				if(!rcdRead.get(2).matches("[0-9] + $")){
+				if(!rcdRead.get(2).matches("[0-9]+$")){
 					System.out.println("予期せぬエラーが発生しました");
 					return;
 				}
@@ -84,35 +84,35 @@ public class Trainingwork {
 
 				String commodityCode = rcdRead.get(1);
 
-				if(!branchSalemap.containsKey(branchCode)){
+				if(!branchSaleMap.containsKey(branchCode)){
 					System.out.println(list.get(i).getName() + "の支店コードが不正です");
 					return;
 				}
 
-				if(!commoditySalemap.containsKey(commodityCode)){
+				if(!commoditySaleMap.containsKey(commodityCode)){
 					System.out.println(list.get(i).getName() + "の商品コードが不正です");
 					return;
 				}
 
-				long branchsales = Long.parseLong(rcdRead.get(2));
-				Long test = branchSalemap.get(branchCode) + branchsales;
+				long branchSales = Long.parseLong(rcdRead.get(2));
+				Long test = branchSaleMap.get(branchCode) + branchSales;
 
 				if(test > 1000000000){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
 
-				branchSalemap.put(branchCode,test);
+				branchSaleMap.put(branchCode,test);
 
-				long commoditysales = Long.parseLong(rcdRead.get(2));
-				Long tesst = commoditySalemap.get(commodityCode) + commoditysales;
+				long commoditySales = Long.parseLong(rcdRead.get(2));
+				Long tesst = commoditySaleMap.get(commodityCode) + commoditySales;
 
 				if(tesst > 1000000000){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
 
-				commoditySalemap.put(commodityCode, tesst);
+				commoditySaleMap.put(commodityCode, tesst);
 
 			}catch(FileNotFoundException e){
 				System.out.println("予期せぬエラーが発生しました");
@@ -123,7 +123,7 @@ public class Trainingwork {
 			}finally{
 				try{
 					if(bffr != null){
-					bffr.close();
+						bffr.close();
 					}
 				}catch(Exception e){
 					System.out.println("予期せぬエラーが発生しました");
@@ -132,11 +132,11 @@ public class Trainingwork {
 			}
 		}
 
-		if(!fileOut(args[0], "branch.out", branchNamemap, branchSalemap)){
+		if(!fileOut(args[0], "branch.out", branchNameMap, branchSaleMap)){
 			return;
 		}
 
-		if(!fileOut(args[0], "commodity.out", commodityNamemap, commoditySalemap)){
+		if(!fileOut(args[0], "commodity.out", commodityNameMap, commoditySaleMap)){
 			return;
 		}
 	}
@@ -158,8 +158,8 @@ public class Trainingwork {
 			String s;
 			while((s = br.readLine()) != null){
 				String[] arrey = s.split(",");
-				String splitlist = arrey[0];
-				if((arrey.length != 2) || !splitlist.matches(code)){
+				String splitList = arrey[0];
+				if((arrey.length != 2) || !splitList.matches(code)){
 					System.out.println(message + "定義ファイルのフォーマットが不正です");
 					return false;
 				}
@@ -179,8 +179,8 @@ public class Trainingwork {
 				return false;
 			}
 		}
-			return true;
-		}
+		return true;
+	}
 
 
 
@@ -191,18 +191,18 @@ public class Trainingwork {
 		BufferedWriter bw = null;
 
 		try{
-			FileWriter fileywriter = new FileWriter(filey);
-			bw = new BufferedWriter(fileywriter);
-			List<Map.Entry<String,Long>> commodityentries =
+			FileWriter fileWriter = new FileWriter(filey);
+			bw = new BufferedWriter(fileWriter);
+			List<Map.Entry<String,Long>> commodityEntry =
 					new ArrayList<Map.Entry<String,Long>>(sales.entrySet());
-			Collections.sort(commodityentries, new Comparator<Map.Entry<String,Long>>() {
+			Collections.sort(commodityEntry, new Comparator<Map.Entry<String,Long>>() {
 				public int compare(
 					Entry<String,Long> entry1, Entry<String,Long> entry2) {
 					return ((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
 					}
 			});
 
-			for (Entry<String,Long> entryy : commodityentries){
+			for (Entry<String,Long> entryy : commodityEntry){
 				bw.write(entryy.getKey() + "," +  names.get(entryy.getKey()) + "," + entryy.getValue());
 				bw.newLine();
 			}
