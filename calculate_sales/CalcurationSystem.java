@@ -36,7 +36,6 @@ public class CalcurationSystem {
 			return;
 		}
 
-
 		File dir = new File(args[0]);
 		ArrayList<File> list = new ArrayList<File>();
 
@@ -81,7 +80,6 @@ public class CalcurationSystem {
 				}
 
 				String branchCode = rcdRead.get(0);
-
 				String commodityCode = rcdRead.get(1);
 
 				if(!branchSaleMap.containsKey(branchCode)){
@@ -95,7 +93,7 @@ public class CalcurationSystem {
 				}
 
 				long branchSales = Long.parseLong(rcdRead.get(2));
-				Long branchTotal = branchSaleMap.get(branchCode) + branchSales;
+				long branchTotal = branchSaleMap.get(branchCode) + branchSales;
 
 				if(branchTotal >= 10000000000L){
 					System.out.println("合計金額が10桁を超えました");
@@ -105,7 +103,7 @@ public class CalcurationSystem {
 				branchSaleMap.put(branchCode, branchTotal);
 
 				long commoditySales = Long.parseLong(rcdRead.get(2));
-				Long commodityTotal = commoditySaleMap.get(commodityCode) + commoditySales;
+				long commodityTotal = commoditySaleMap.get(commodityCode) + commoditySales;
 
 				if(commodityTotal >= 10000000000L){
 					System.out.println("合計金額が10桁を超えました");
@@ -141,7 +139,6 @@ public class CalcurationSystem {
 		}
 	}
 
-
 	public static boolean fileRead(String dirPath, String fileName, HashMap<String, String> names,
 		HashMap<String, Long> sales, String code, String message){
 		BufferedReader br = null;
@@ -158,7 +155,7 @@ public class CalcurationSystem {
 			String s;
 			while((s = br.readLine()) != null){
 				String[] array = s.split(",");
-				if((array.length != 2) || !array[1].matches(code)){
+				if((array.length != 2) || !array[0].matches(code)){
 					System.out.println(message + "定義ファイルのフォーマットが不正です");
 					return false;
 				}
@@ -180,8 +177,6 @@ public class CalcurationSystem {
 		}
 		return true;
 	}
-
-
 
 	public static boolean fileOut(String dirPath, String fileName, HashMap<String, String> names,
 			HashMap<String, Long> sales){
