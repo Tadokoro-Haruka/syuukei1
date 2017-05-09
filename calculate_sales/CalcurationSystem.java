@@ -95,24 +95,24 @@ public class CalcurationSystem {
 				}
 
 				long branchSales = Long.parseLong(rcdRead.get(2));
-				Long test = branchSaleMap.get(branchCode) + branchSales;
+				Long branchTotal = branchSaleMap.get(branchCode) + branchSales;
 
-				if(test > 1000000000){
+				if(branchTotal >= 10000000000L){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
 
-				branchSaleMap.put(branchCode,test);
+				branchSaleMap.put(branchCode, branchTotal);
 
 				long commoditySales = Long.parseLong(rcdRead.get(2));
-				Long tesst = commoditySaleMap.get(commodityCode) + commoditySales;
+				Long commodityTotal = commoditySaleMap.get(commodityCode) + commoditySales;
 
-				if(tesst > 1000000000){
+				if(commodityTotal >= 10000000000L){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
 
-				commoditySaleMap.put(commodityCode, tesst);
+				commoditySaleMap.put(commodityCode, commodityTotal);
 
 			}catch(FileNotFoundException e){
 				System.out.println("予期せぬエラーが発生しました");
@@ -157,14 +157,13 @@ public class CalcurationSystem {
 			br = new BufferedReader(fr);
 			String s;
 			while((s = br.readLine()) != null){
-				String[] arrey = s.split(",");
-				String splitList = arrey[0];
-				if((arrey.length != 2) || !splitList.matches(code)){
+				String[] array = s.split(",");
+				if((array.length != 2) || !array[1].matches(code)){
 					System.out.println(message + "定義ファイルのフォーマットが不正です");
 					return false;
 				}
-				names.put(arrey[0], arrey[1]);
-				sales.put(arrey[0], 0L);
+				names.put(array[0], array[1]);
+				sales.put(array[0], 0L);
 			}
 		}catch(Exception e){
 			System.out.println("予期せぬエラーが発生しました");
